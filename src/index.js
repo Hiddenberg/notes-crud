@@ -1,8 +1,12 @@
 const express = require("express")
+const notesRouter = require("./routes/notes.js")
 
 const app = express()
 const port = process.env.PORT ?? 8080
 
+app.use(express.json())
+
+app.use("/api/notes", notesRouter)
 app.get("/", (req, res) => {
    res.send("hi")
 })
