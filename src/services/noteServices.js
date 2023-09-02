@@ -1,4 +1,6 @@
-function createNote(note) {
+const db = require("../libs/mySQL.js")
+
+async function createNote(note) {
    // TODO: note creation
 }
 
