@@ -1,10 +1,12 @@
 const mysql = require('mysql2')
+const { on } = require('nodemon')
 const connection = mysql.createConnection({
    host: process.env.MYSQL_HOST,
    user: process.env.MYSQL_USER,
    password: process.env.MYSQL_PASSWORD,
    database: process.env.MYSQL_DATABASE,
 })
+
 
 connection.connect((err) => {
    if (err) {
@@ -14,6 +16,7 @@ connection.connect((err) => {
 
    console.log('DB Connected!')
 })
+
 
 process.on('SIGINT', () => {
    connection.end()
@@ -26,4 +29,5 @@ process.on('exit', (code) => {
    console.log(`Exit with code: ${code}`)
 })
 
-module.exports = connection
+const db = connection.promise()
+module.exports = db
