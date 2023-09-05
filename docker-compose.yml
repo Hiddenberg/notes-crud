@@ -2,18 +2,14 @@ version: '3'
 
 services:
   node:
-    image: node:lts-alpine
+    build: ./
     env_file:
       - .env
     working_dir: /app
-    volumes:
-      - ./:/app
     ports:
       - "8080:8080"
     expose:
       - "8080"
-    command: npm run dev
-    restart: always
     depends_on:
       notes-db:
         condition: service_healthy
