@@ -26,7 +26,9 @@ router.post("/", async (req, res, next) => {
       const noteCreated = await createNote(note)
       res.json({
          message: "Note created",
-         noteId: noteCreated
+         data: {
+            noteId: noteCreated
+         }
       })
    } catch (error) {
       next(error)

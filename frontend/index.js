@@ -10,7 +10,7 @@
  * @param {Note} note
  */
 async function renderNote(note) {
-   const noteTemplate = `<div data-noteid=${note.id} class="note">
+   const noteTemplate = `<div data-noteid=${note.id} class="note note--expanded">
    <button class="button button--deleteNote">X</button>
    <h3 class="note__title">${note.title}</h3>
    <p class="note__text">${note.content}</p>
@@ -19,16 +19,28 @@ async function renderNote(note) {
    const notesContainer = document.querySelector(".notesContainer");
    notesContainer.insertAdjacentHTML("beforeend", noteTemplate);
 
-   // Event listeners
+   // Adding animation
    const noteElement = document.querySelector(`.note[data-noteid="${note.id}"]`);
 
+   // Event listeners
    const deleteButtonElement = noteElement.querySelector(".button--deleteNote");
    const titleElement = noteElement.querySelector(".note__title");
    const contentElement = noteElement.querySelector(".note__text");
 
    const deleteListener = async (event) => {
       await deleteNote(note.id);
-      deleteNoteFromDOM(note.id);
+
+      event.target.remove();
+
+      noteElement.classList.remove("note--expanded");
+      setInterval(() => {
+         noteElement.classList.add("note--deleted");
+      }, 0);
+
+   
+      setTimeout(() => {
+         deleteNoteFromDOM(note.id);
+      }, 500);
 
       noteElement.removeEventListener("click", deleteListener);
    };
@@ -129,9 +141,11 @@ async function createNote(noteData) {
       throw new Error(`HTTP error! status: ${response.status}`);
    }
 
-   const noteid = await response.json().noteid;
+   const json = await response.json();
 
-   return noteid;
+   const noteId = json.data.noteId;
+
+   return noteId;
 }
 
 /**
